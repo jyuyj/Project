@@ -1,4 +1,4 @@
-package com.maumgagym.facility.controller;
+package com.maumgagym.facility;
 
 import java.io.File;
 import java.io.IOException;
