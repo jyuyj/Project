@@ -1,6 +1,4 @@
-<%@page import="com.maumgagym.dto.MemberShipTO"%>
-<%@page import="com.maumgagym.dto.MemberTO"%>
-<%@page import="com.maumgagym.dto.BoardTO"%>
+<%@page import="com.maumgagym.facility.dto.FacilityTO"%>
 <%@page import="java.util.Map"%>
 <%@page import="java.util.ArrayList"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
@@ -8,8 +6,8 @@
 <%
  	request.setCharacterEncoding("utf-8");
 	
-	ArrayList facilityLists = (ArrayList) request.getAttribute("facilityLists");
-	//System.out.println( facilityLists.size() );
+	ArrayList<FacilityTO> list = (ArrayList<FacilityTO>) request.getAttribute("list");
+	System.out.println( "list.size() : " + list.size() );
 	
 	String data = null;
 	String[] dongAddr = null;
@@ -33,33 +31,22 @@
 	if( request.getParameter( "category_seq" ) != null ) {
 		categorySeq = Integer.parseInt( request.getParameter( "category_seq" ) );   // int형 변수 categorySeq에 대입
 	}
+
 	
-	BoardTO bto = new BoardTO();
-	MemberTO mto = new MemberTO();
-	MemberShipTO msto = new MemberShipTO();
 	
 	StringBuilder sb = new StringBuilder();
+
 	
-	for( int i=0; i<facilityLists.size(); i++ ){
-		Map<String, Object> map0 = (Map<String, Object>) facilityLists.get(i);
+	for( FacilityTO fto :list ){
 		
-		bto = (BoardTO) map0.get("bto"+(i+1));
-		//System.out.println(bto.getTitle());
-		
-		mto = (MemberTO) map0.get("mto"+(i+1));
-		//System.out.println( "list.jsp : " + mto.getAddress());
-		
-		msto = (MemberShipTO) map0.get("msto"+(i+1));
-		//System.out.println(msto.getMembership_price());
-		
-		String tag = bto.getTag();
-		int seq = bto.getSeq();
-		String title = bto.getTitle();
-		String imageName = bto.getImage_name();
-		String address = mto.getAddress();
-		String[] facilityAddress = mto.getAddress().split( " " );
-		int price =  msto.getMembership_price(); 
-		//System.out.println( tag);
+	String tag = fto.getTag();
+	int seq = fto.getB_seq();
+	String title = fto.getTitle();
+	String imageName = fto.getImage_name();
+	String address = fto.getAddress();
+	String[] facilityAddress = fto.getAddress().split( " " );
+	int price =  fto.getPrice(); 
+	//System.out.println( "title : "  + title );
 		
 		// 위치 X, 카테고리 X     ==>   전체 리스트 출력
 		if( ( dongAddr == null ) && ( categorySeq == 0 ) ){
@@ -87,7 +74,7 @@
 			
 		// 위치 X, 카테고리 O	
 		} else if( (dongAddr == null ) && (categorySeq != 0 ) ){
-			if( categorySeq == bto.getCategory_seq() ) {
+			if( categorySeq == fto.getCategory_seq() ) {
 				sb.append("	<div class='col'>");
 				sb.append("		<div class='card shadow-sm'>");
 				sb.append("			<a href='/facility/" + seq + "'>");
@@ -137,7 +124,7 @@
 		
 		// 위치 O, 카테고리 O
 		} else if( (dongAddr != null ) && (categorySeq != 0 ) ){
-			if( dongAddr[2].equals( facilityAddress[2] ) && categorySeq == bto.getCategory_seq() ) {
+			if( dongAddr[2].equals( facilityAddress[2] ) && categorySeq == fto.getCategory_seq() ) {
 				sb.append("	<div class='col'>");
 				sb.append("		<div class='card shadow-sm'>");
 				sb.append("			<a href='/facility/" + seq + "'>");
@@ -162,8 +149,6 @@
 		}
 	}
 	
-	System.out.println( "type : " + request.getParameter( "type" ) );
-
 %>
 
 <hr />

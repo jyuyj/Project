@@ -1,4 +1,4 @@
-package com.maumgagym.controller;
+package com.maumgagym.facility.controller;
 
 import java.io.File;
 import java.io.IOException;
@@ -22,11 +22,12 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.google.gson.JsonObject;
-import com.maumgagym.dao.FacilityDAO;
 import com.maumgagym.dao.MypageDAO;
 import com.maumgagym.dto.BoardTO;
 import com.maumgagym.dto.MemberShipTO;
 import com.maumgagym.dto.MemberTO;
+import com.maumgagym.facility.dao.FacilityDAO;
+import com.maumgagym.facility.dto.FacilityTO;
 
 @Controller
 public class FacilityController {
@@ -37,18 +38,7 @@ public class FacilityController {
 	@Autowired
 	private MypageDAO mydao;
 	
-	private String uploadPath = "C:\\java2\\teamproject-workspace\\SpringBoot_Maumgagym\\src\\main\\webapp\\upload";
-	
-	// 지도
-	@RequestMapping(value="/facility/loc", method=RequestMethod.GET)
-	public ModelAndView facilityLoc( HttpServletRequest req ) {
-		//System.out.println( "컨트롤러 /facility/loc" );
-		
-		ModelAndView mav = new ModelAndView();
-		mav.setViewName( "facilityMapPage" );
-		
-		return mav;
-	}
+	private String uploadPath = "C:\\java2\\project\\Project\\src\\main\\webapp\\upload";
 	
 	// 리스트
 	@RequestMapping(value="/facility", method=RequestMethod.GET)
@@ -56,15 +46,26 @@ public class FacilityController {
 		//System.out.println( "컨트롤러 /facility/list" );
 		
 		String data = null;
-		ArrayList facilityLists = dao.facility();
+		ArrayList<FacilityTO> facilityLists = dao.facilityList();
 		//System.out.println("컨트롤러 주소 : " + req.getParameter( "address" ));
 		data = req.getParameter( "address" );
 		//System.out.println( "data : " + data );
 		
 		ModelAndView mav = new ModelAndView();
-		mav.setViewName( "facilityPage" );
-		mav.addObject( "facilityLists", facilityLists );
+		mav.setViewName( "facilityListPage" );
+		mav.addObject( "list", facilityLists );
 		mav.addObject( "data", data );
+		
+		return mav;
+	}
+
+	// 지도
+	@RequestMapping(value="/facility/loc", method=RequestMethod.GET)
+	public ModelAndView facilityLoc( HttpServletRequest req ) {
+		//System.out.println( "컨트롤러 /facility/loc" );
+		
+		ModelAndView mav = new ModelAndView();
+		mav.setViewName( "facilityMapPage" );
 		
 		return mav;
 	}
