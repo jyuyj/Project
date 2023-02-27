@@ -84,7 +84,7 @@ public class FacilityController {
 		
 		ModelAndView mav = new ModelAndView();
 		
-		// 1. 사진을 저장합니다.
+		// 1. 사진을 저장합니다.z
 		String saveFileName = UUID.randomUUID().toString() + upload.getOriginalFilename().substring( upload.getOriginalFilename().indexOf(".") );
 		try { upload.transferTo( new File( saveFileName ) ); } catch (IOException e) { System.out.println( "[에러] :" + e.getMessage()); }	
 		

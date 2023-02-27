@@ -16,7 +16,6 @@
 	
 	window.onload = function() {	
 		
-
 		document.getElementById( 'wbtn' ).onclick = function() {
 			if( document.getElementById("category").selectedIndex == 0 ) {
 				alert("카테고리를 선택해 주세요.");
@@ -32,7 +31,7 @@
 				alert("내용을 입력해 주세요.");
 				return false;
 			}
-
+			
 			document.wfrm.submit();
 		}
 	}
@@ -46,7 +45,7 @@
 	<!--  <h4 class="fw-bold py-3">글쓰기</h4>-->
 	<div class="row">
 		<div class="col-sm-2 h3 fw-bold py-3">글쓰기</div>
-		<div class="col-sm-10 text-secondary fs-6 fw-lighter"  style="margin-top:25px">글쓰기 버튼 클릭 시 마음가짐 관리자가 확인 후 등룍 완료 됩니다.</div>
+		<div class="col-sm-10 text-secondary fs-6 fw-lighter"  style="margin-top:25px">회원권 금액은 숫자만 입력 가능합니다.</div>
 	</div>
 	<div class="con_txt">
 		<form action="/facility/writeOK" method="post" name="wfrm" enctype="multipart/form-data">
@@ -75,19 +74,19 @@
 				</tr>
 				<tr>
 					<th class="fs-bold fw-4 bg-light" >회원권(1개월)</th>
-					<td><input type="text" name="membership1" id="membership1" value="" class="form-control" /></td>
+					<td><input type="text" name="membership1" id="membership" onKeyup="this.value=this.value.replace(/[^0-9]/g,'');" value="" class="form-control" /></td>
 				</tr>
 				<tr>
 					<th class="fs-bold fw-4 bg-light">회원권(3개월)</th>
-					<td><input type="text" name="membership3" id="membership3" value="" class="form-control" /></td>
+					<td><input type="text" name="membership3" id="membership" onKeyup="this.value=this.value.replace(/[^0-9]/g,'');" value="" class="form-control" /></td>
 				</tr>	
 				<tr>
 					<th class="fs-bold fw-4 bg-light">회원권(6개월)</th>
-					<td><input type="text" name="membership6" id="membership6" value="" class="form-control" /></td>
+					<td><input type="text" name="membership6" id="membership" onKeyup="this.value=this.value.replace(/[^0-9]/g,'');" value="" class="form-control" /></td>
 				</tr>	
 				<tr>
 					<th class="fs-bold fw-4 bg-light">회원권(12개월)</th>
-					<td><input type="text" name="membership12" id="membership12" value="" class="form-control" /></td>
+					<td><input type="text" name="membership12" id="membership" onKeyup="this.value=this.value.replace(/[^0-9]/g,'');" value="" class="form-control" /></td>
 				</tr>										
 				<!--  
 				<tr>
@@ -98,7 +97,7 @@
 				<tr>
 					<th class="fs-bold fw-4 bg-light">내용</th>
 					<td>
-		  				<textarea id="summernote" name="content" class="form-control" ></textarea> 
+		  				<textarea id="content" name="content" class="form-control" ></textarea> 
 		  				<!-- <input type="hidden" name="file" id="file" value=""></input> -->
 					</td>
 				</tr>

@@ -34,7 +34,7 @@
 	
 	<link href="./resources/asset/css/templatemo-pod-talk.css" rel="stylesheet"/>
 	<!--  header news -->
-	<link rel="stylesheet" href="/resources/asset/css/news.css"/>
+	<link rel="stylesheet" href="./resources/asset/css/news.css"/>
 	
 </head>
 <body>
