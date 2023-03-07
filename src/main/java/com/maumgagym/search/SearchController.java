@@ -1,4 +1,4 @@
-package com.maumgagym.controller;
+package com.maumgagym.search;
 
 import java.util.ArrayList;
 
@@ -10,7 +10,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.maumgagym.dao.SearchDAO;
+import com.maumgagym.search.dao.SearchDAO;
+import com.maumgagym.search.dto.SearchTO;
+
 
 @Controller
 public class SearchController {
@@ -23,14 +25,14 @@ public class SearchController {
 		//System.out.println( "컨트롤러 /search/list" );
 		
 		String data = null;
-		ArrayList searchLists = dao.searchresult();
+		ArrayList<SearchTO> searchLists = dao.searchResult();
 		//System.out.println("컨트롤러 검색어 : " + req.getParameter( "search" ));
 		data = req.getParameter( "search" );
 		//System.out.println( "data : " + data );
 		
 		ModelAndView mav = new ModelAndView();
 		mav.setViewName( "searchPage" );
-		mav.addObject( "searchLists", searchLists  );
+		mav.addObject( "list", searchLists  );
 		mav.addObject( "data", data );
 		
 		return mav;
