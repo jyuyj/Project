@@ -5,7 +5,13 @@
 	window.onload = function() {
 		document.getElementById( 'sbtn' ).onclick = function() {
 		
-			document.sfrm.submit();
+			if( $('#search').val() == '' ){
+				alert( '검색어를 입력해 주세요.' );
+				location.href='home';
+				return false;
+			} else {
+				document.sfrm.submit();
+			}
 		};
 	}
 </script>
@@ -14,7 +20,7 @@
 	<div class="row">
 		<div class="col-md-8 mb-3 mb-sm-0">
 		<form action="/search"  method="GET" name="sfrm" class="d-flex px-3 justify-content-center" style="height: 60px;">
-			<input class="form-control-lg me-2 p-2 w-75" type="text" name="search" placeholder="여기에서 지역/종목/센터명을 검색해보세요." value="">
+			<input class="form-control-lg me-2 p-2 w-75" type="text" id="search" name="search" placeholder="여기에서 지역/종목/센터명을 검색해보세요." value="">
 			<button class="btn btn-primary text-nowrap btn-lg p-2 flex-shrink-1" type="submit" id="sbtn" style="width: 100px;">검색</button>
 		</form>
 		</div>
