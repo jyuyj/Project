@@ -2,26 +2,20 @@ package com.maumgagym.facility;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.google.gson.JsonObject;
 import com.maumgagym.dao.MypageDAO;
 import com.maumgagym.dto.BoardTO;
 import com.maumgagym.dto.MemberShipTO;
@@ -58,7 +52,7 @@ public class FacilityController {
 		
 		return mav;
 	}
-
+	
 	// 지도
 	@RequestMapping(value="/facility/loc", method=RequestMethod.GET)
 	public ModelAndView facilityLoc( HttpServletRequest req ) {
@@ -84,7 +78,7 @@ public class FacilityController {
 		
 		ModelAndView mav = new ModelAndView();
 		
-		// 1. 사진을 저장합니다.z
+		// 1. 사진을 저장합니다.
 		String saveFileName = UUID.randomUUID().toString() + upload.getOriginalFilename().substring( upload.getOriginalFilename().indexOf(".") );
 		try { upload.transferTo( new File( saveFileName ) ); } catch (IOException e) { System.out.println( "[에러] :" + e.getMessage()); }	
 		
@@ -177,5 +171,4 @@ public class FacilityController {
 		mav.setViewName( "facility_writeOkPage" );
 		return mav;
 	}
-
 }
