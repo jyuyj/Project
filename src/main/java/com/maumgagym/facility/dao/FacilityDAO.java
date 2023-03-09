@@ -6,17 +6,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.maumgagym.dto.BoardTO;
-import com.maumgagym.dto.MemberShipTO;
-import com.maumgagym.dto.MemberTO;
 import com.maumgagym.facility.dto.FacilityTO;
 
 @Repository
@@ -24,8 +18,6 @@ public class FacilityDAO {
 	
 	@Autowired
 	private DataSource dataSource;
-	
-	private String uploadPath = "C:/eGovFrameDev-4.0.0-64bit/project/Project/src/main/webapp/upload";
 	
 	public ArrayList<FacilityTO> facilityList() {
 		
@@ -41,12 +33,12 @@ public class FacilityDAO {
 			// 글 게시판의 title을 통한 업체 정보, 멤버 게시판의 address을 통한 주소 정보, 멤버쉽 게시판의 price를 통한 가격 정보, 이미지 게시판의 name을 통한 이미지 파일, 태그 게시판의 tag를 통한 글 태그를 가져옴
 			// 카테고리 게시판의 seq는 1~9번(운동시설)으로 가져옴
 			String sql = "SELECT b.seq, b.title, b.category_seq, m.address, ms.price, i.name, t.tag "
-					+ "FROM board b LEFT OUTER JOIN member m ON( b.write_seq = m.seq ) "
-					+ "LEFT OUTER JOIN membership ms ON( b.seq = ms.board_seq ) "
-					+ "LEFT OUTER JOIN image i ON( b.seq = i.board_seq ) "
-					+ "LEFT OUTER JOIN tag t ON( b.seq = t.board_seq ) "
-					+ "LEFT OUTER JOIN category c ON( b.category_seq = c.seq ) "
-					+ "WHERE c.seq <= 9 && b.status=1 group BY b.seq;";
+					+ "FROM board b LEFT OUTER JOIN member m ON( b.write_seq = m.seq )"
+					+ "LEFT OUTER JOIN membership ms ON( b.seq = ms.board_seq )"
+					+ "LEFT OUTER JOIN image i ON( b.seq = i.board_seq )"
+					+ "LEFT OUTER JOIN tag t ON( b.seq = t.board_seq )"
+					+ "LEFT OUTER JOIN category c ON( b.category_seq = c.seq )"
+					+ "WHERE c.seq <= 9 && b.status=1 group BY b.seq ORDER BY b.seq DESC;";
 			
 			pstmt = conn.prepareStatement(sql);
 			rs = pstmt.executeQuery();
@@ -79,7 +71,7 @@ public class FacilityDAO {
 		
 	}
 	
-	public BoardTO selectfacilityBoard( BoardTO to ) {
+	public FacilityTO selectfacilityBoard( FacilityTO fto ) {
 		
 		Connection conn = null;
 		PreparedStatement pstmt = null;
@@ -95,12 +87,12 @@ public class FacilityDAO {
 				+ "				LIMIT 0,1";
 		
 		pstmt = conn.prepareStatement(sql);
-		pstmt.setInt(1, to.getWrite_seq());
+		pstmt.setInt(1, fto.getWrite_seq());
 		
 		rs = pstmt.executeQuery();
 		
 		if( rs.next() ) {
-			to.setSeq( rs.getInt("seq") );
+			fto.setB_seq( rs.getInt("seq") );
 		}
 		
 		} catch( SQLException e) {
@@ -110,10 +102,10 @@ public class FacilityDAO {
 			if( conn != null) try { conn.close(); } catch( SQLException e ) {}
 		}
 		
-		return to;
+		return fto;
 	}
 	
-	public int insertfacilityBoard( BoardTO to ) {
+	public int insertfacilityBoard( FacilityTO fto ) {
 		
 		Connection conn = null;
 		PreparedStatement pstmt = null;
@@ -128,10 +120,10 @@ public class FacilityDAO {
 		
 		pstmt = conn.prepareStatement(sql);
 		
-		pstmt.setInt(1, to.getCategory_seq() );
-		pstmt.setString(2, to.getTitle() );
-		pstmt.setString(3, to.getContent() );
-		pstmt.setInt(4, to.getWrite_seq() );
+		pstmt.setInt(1, fto.getCategory_seq() );
+		pstmt.setString(2, fto.getTitle() );
+		pstmt.setString(3, fto.getContent() );
+		pstmt.setInt(4, fto.getWrite_seq() );
 		
 		if( pstmt.executeUpdate() == 1) {
 			flag = 0;
@@ -147,7 +139,7 @@ public class FacilityDAO {
 		return flag;
 	}
 	
-	public int insertfacilityImage( BoardTO to ) {
+	public int insertfacilityImage( FacilityTO fto ) {
 		
 		Connection conn = null;
 		PreparedStatement pstmt = null;
@@ -162,9 +154,9 @@ public class FacilityDAO {
 		
 		pstmt = conn.prepareStatement(sql);
 		
-		pstmt.setString(1, to.getImage_name() );
-		pstmt.setDouble(2, to.getImage_size() );
-		pstmt.setInt(3, to.getSeq() );
+		pstmt.setString(1, fto.getImage_name() );
+		pstmt.setDouble(2, fto.getImage_size() );
+		pstmt.setInt(3, fto.getB_seq() );
 		
 		if( pstmt.executeUpdate() == 1) {
 			flag = 0;
@@ -182,7 +174,7 @@ public class FacilityDAO {
 		return flag;
 	}
 	
-	public int insertfacilityMembership( BoardTO bto, MemberShipTO msto ) {
+	public int insertfacilityMembership( FacilityTO fto ) {
 		
 		Connection conn = null;
 		PreparedStatement pstmt = null;
@@ -197,11 +189,11 @@ public class FacilityDAO {
 		
 		pstmt = conn.prepareStatement(sql);
 		
-		pstmt.setInt(1, bto.getWrite_seq() );
-		pstmt.setString(2, msto.getMembership_name()  );
-		pstmt.setInt(3, msto.getMembership_price() );
-		pstmt.setInt(4, msto.getMembership_period() );
-		pstmt.setInt(5, bto.getSeq() );
+		pstmt.setInt(1, fto.getWrite_seq() );
+		pstmt.setString(2, fto.getMs_name()  );
+		pstmt.setInt(3, fto.getPrice() );
+		pstmt.setInt(4, fto.getPeriod() );
+		pstmt.setInt(5, fto.getB_seq() );
 		
 		if( pstmt.executeUpdate() == 1) {
 			flag = 0;

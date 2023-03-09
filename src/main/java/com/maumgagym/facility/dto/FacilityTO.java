@@ -19,9 +19,12 @@ public class FacilityTO {
 	//member
 	int m_seq;
 	String address;
+	String id;
 	
 	//membership
 	int price;
+	String ms_name;
+	int period;
 	
 	//tag
 	String tag;
