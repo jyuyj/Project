@@ -8,8 +8,6 @@
 		id = null;
 	}
 	
-	System.out.println( "id : " + id );
-	
 	String type = null;
 	if( session.getAttribute( "type" ) != null ) {
 		type = (String) session.getAttribute( "type" );
@@ -17,7 +15,6 @@
 		type = null;
 	}
 	
-	System.out.println( "typeeeee : " + type );
 %>
 <!DOCTYPE html>
 <html>

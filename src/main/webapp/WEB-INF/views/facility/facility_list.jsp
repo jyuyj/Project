@@ -1,11 +1,11 @@
 <%@page import="com.maumgagym.facility.dto.FacilityTO"%>
-<%@page import="java.util.Map"%>
 <%@page import="java.util.ArrayList"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%
  	request.setCharacterEncoding("utf-8");
-	
+
+	// 리스트 출력
 	ArrayList<FacilityTO> list = (ArrayList<FacilityTO>) request.getAttribute("list");
 	System.out.println( "list.size() : " + list.size() );
 	
@@ -19,10 +19,6 @@
 	} else {
 		data = (String)request.getAttribute( "data" );
 		dongAddr = data.split(" ");
-		//System.out.println( "data : " + data );
-		//System.out.println( "dongAddr[0] : " + dongAddr[0] );
-		//System.out.println( "dongAddr[1] : " + dongAddr[1] );
-		//System.out.println( "dongAddr[2] : " + dongAddr[2] );
 		
 		fullDongAddr = String.format( "%s %s %s", dongAddr[0], dongAddr[1], dongAddr[2] );
 	
@@ -46,7 +42,6 @@
 	String address = fto.getAddress();
 	String[] facilityAddress = fto.getAddress().split( " " );
 	int price =  fto.getPrice(); 
-	//System.out.println( "title : "  + title );
 		
 		// 위치 X, 카테고리 X     ==>   전체 리스트 출력
 		if( ( dongAddr == null ) && ( categorySeq == 0 ) ){
@@ -54,7 +49,9 @@
 			sb.append("		<div class='card shadow-sm'>");
 			sb.append("			<a href='/facility/" + seq + "'>");
 			sb.append("			<img src='../upload/" + imageName + "' class='card-img-top' alt='...' /></a>");
-			sb.append("			<span class='label-top'>" + tag + "</span>");
+			if( tag != null ) {
+				sb.append("			<span class='label-top'>" + tag + "</span>");
+			}
 			sb.append("			<div class='card-body'>");
 			sb.append("				<div class='clearfix mb-3'>");
 			sb.append("					<span class='float-start badge rounded-pill bg'>" + String.format("￦%,d", price) + "</span>" );
@@ -70,7 +67,6 @@
 			sb.append("			</div>");
 			sb.append("		</div>");
 			sb.append("	</div>"); 
-			//System.out.println( sb.toString() );
 			
 		// 위치 X, 카테고리 O	
 		} else if( (dongAddr == null ) && (categorySeq != 0 ) ){
@@ -149,6 +145,9 @@
 		}
 	}
 	
+	
+	
+	
 %>
 
 <hr />
@@ -213,11 +212,6 @@
 				</li>
 			</ul>
 		</div>
-
-		<!-- 업체 목록 -->
-		<!--  <div class="d-flex flex-column flex-wrap my-4 p-4"
-		style="position: relative; max-width: 1500px; margin:0 auto;">
-		-->
 		<div class="container">
 			<div class="row row-cols-3">
 				  <%=sb.toString() %> 
@@ -241,12 +235,6 @@ $(document).ready(function() {
 		
 		//파라미터 객체 생성  => 변경된 페이지 주소 반영
 		const urlParams = url.searchParams;
-		
-		//객체 로그 확인
-		//console.log( "urlParams : " + urlParams);
-		
-		// dongAddr 파라미터 확인
-		//console.log( "dongAddr파라미터 : " + urlParams.has( "address") ); 
 		
 		//위치(dongAddr)X / 카테고리(category_seq) X   ==>   카테고리 번호 파라미터 추가
 		if( !( urlParams.has( "address" ) ) && !( urlParams.has( "category_seq" ) ) ) {
