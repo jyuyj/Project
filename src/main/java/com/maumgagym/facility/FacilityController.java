@@ -17,8 +17,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.maumgagym.dao.MypageDAO;
-import com.maumgagym.dto.BoardTO;
-import com.maumgagym.dto.MemberShipTO;
 import com.maumgagym.dto.MemberTO;
 import com.maumgagym.facility.dao.FacilityDAO;
 import com.maumgagym.facility.dto.FacilityTO;
@@ -32,18 +30,13 @@ public class FacilityController {
 	@Autowired
 	private MypageDAO mydao;
 	
-	private String uploadPath = "C:\\java2\\project\\Project\\src\\main\\webapp\\upload";
-	
 	// 리스트
 	@RequestMapping(value="/facility", method=RequestMethod.GET)
 	public ModelAndView facilityLocList( HttpServletRequest req) {
-		//System.out.println( "컨트롤러 /facility/list" );
 		
 		String data = null;
 		ArrayList<FacilityTO> facilityLists = dao.facilityList();
-		//System.out.println("컨트롤러 주소 : " + req.getParameter( "address" ));
 		data = req.getParameter( "address" );
-		//System.out.println( "data : " + data );
 		
 		ModelAndView mav = new ModelAndView();
 		mav.setViewName( "facilityListPage" );
@@ -56,7 +49,6 @@ public class FacilityController {
 	// 지도
 	@RequestMapping(value="/facility/loc", method=RequestMethod.GET)
 	public ModelAndView facilityLoc( HttpServletRequest req ) {
-		//System.out.println( "컨트롤러 /facility/loc" );
 		
 		ModelAndView mav = new ModelAndView();
 		mav.setViewName( "facilityMapPage" );
@@ -90,25 +82,25 @@ public class FacilityController {
 		
 		
 		// 3. 게시글을 작성합니다.
-		BoardTO bto = new BoardTO();
-		bto.setCategory_seq( Integer.parseInt( req.getParameter("category") ) );
-		bto.setTitle( req.getParameter("title") );
-		bto.setContent( req.getParameter("content") );
-		bto.setWrite_seq( mto.getSeq() );
-		int flag = dao.insertfacilityBoard(bto);
+		FacilityTO fto = new FacilityTO();
+		fto.setCategory_seq( Integer.parseInt( req.getParameter("category") ) );
+		fto.setTitle( req.getParameter("title") );
+		fto.setContent( req.getParameter("content") );
+		fto.setWrite_seq( fto.getM_seq() );
+		int flag = dao.insertfacilityBoard(fto);
 		
 		
 		//4. 저장된 게시글의 seq를 가져옵니다.
-		bto = dao.selectfacilityBoard(bto);
+		fto = dao.selectfacilityBoard(fto);
 		
-		int boardSeq = bto.getSeq();
+		int boardSeq = fto.getB_seq();
 		
 		// 5. 게시글이 정상적으로 작성이 되었다면, 사진의 정보를 DB에 insert 합니다.
 		// 그게 아니라면 500eroor 페이지로 이동시킵니다.
 		if( flag == 0) {
-			bto.setImage_name(saveFileName);
-			bto.setImage_size(upload.getSize());
-			flag = dao.insertfacilityImage(bto);
+			fto.setImage_name(saveFileName);
+			fto.setImage_size(upload.getSize());
+			flag = dao.insertfacilityImage(fto);
 		}  else {
 			mav.setViewName( "error/500error" );
 			return mav;
@@ -121,43 +113,39 @@ public class FacilityController {
 		
 			if ( !req.getParameter("membership1").equals("") ) {
 				
-				MemberShipTO msto = new MemberShipTO();
-				msto.setMembership_name("1개월권");
-				msto.setMembership_price( Integer.parseInt( req.getParameter("membership1") ) );
-				msto.setMembership_period(1);
+				fto.setMs_name("1개월권");
+				fto.setPrice( Integer.parseInt( req.getParameter("membership1") ) );
+				fto.setPeriod(1);
 				
-				flag = dao.insertfacilityMembership(bto, msto);
+				flag = dao.insertfacilityMembership(fto);
 			}
 			
 			if ( !req.getParameter("membership3").equals("") ) {
 				
-				MemberShipTO msto = new MemberShipTO();
-				msto.setMembership_name("3개월권");
-				msto.setMembership_price( Integer.parseInt( req.getParameter("membership3") ) );
-				msto.setMembership_period(3);
+				fto.setMs_name("3개월권");
+				fto.setPrice( Integer.parseInt( req.getParameter("membership3") ) );
+				fto.setPeriod(3);
 				
-				flag = dao.insertfacilityMembership(bto, msto);
+				flag = dao.insertfacilityMembership(fto);
 				
 			}
 			
 			if ( !req.getParameter("membership6").equals("") ) {
 				
-				MemberShipTO msto = new MemberShipTO();
-				msto.setMembership_name("6개월권");
-				msto.setMembership_price( Integer.parseInt( req.getParameter("membership6") ) );
-				msto.setMembership_period(6);
+				fto.setMs_name("6개월권");
+				fto.setPrice( Integer.parseInt( req.getParameter("membership6") ) );
+				fto.setPeriod(6);
 				
-				flag = dao.insertfacilityMembership(bto, msto);
+				flag = dao.insertfacilityMembership(fto);
 			}
 			
 			if (  !req.getParameter("membership12").equals("") ) {
 				
-				MemberShipTO msto = new MemberShipTO();
-				msto.setMembership_name("12개월권");
-				msto.setMembership_price( Integer.parseInt( req.getParameter("membership12") ) );
-				msto.setMembership_period(12);
+				fto.setMs_name("12개월권");
+				fto.setPrice( Integer.parseInt( req.getParameter("membership12") ) );
+				fto.setPeriod(12);
 				
-				flag = dao.insertfacilityMembership(bto, msto);
+				flag = dao.insertfacilityMembership(fto);
 				
 			}
 		
@@ -167,7 +155,7 @@ public class FacilityController {
 		}
 		
 		mav.addObject( "flag", flag );
-		mav.addObject( "board_seq",  bto.getSeq() );
+		mav.addObject( "board_seq",  fto.getB_seq() );
 		mav.setViewName( "facility_writeOkPage" );
 		return mav;
 	}
